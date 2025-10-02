@@ -39,7 +39,8 @@
         }
 
         #start-text {
-            font-size: 2.5em;
+            /* Mantiene un tamaño fijo, ya que es la pantalla de inicio */
+            font-size: 2.5em; 
             font-weight: bold;
             color: #FFB6C1;
             text-shadow: 
@@ -110,21 +111,24 @@
             opacity: 0;
             transition: all 1s ease-out; 
             padding: 5px 0;
-            white-space: nowrap;
+            /* QUITAMOS white-space: nowrap; para que el texto pueda saltar de línea */
+            /* white-space: nowrap; */
             
             font-weight: bold;
             color: #FFB6C1; 
         }
 
         .passed-line {
-            font-size: 1.2em;
+            /* AJUSTE: Más pequeño y responsivo */
+            font-size: 3vw; 
             opacity: 0.4;
             transform: translateY(-50px) scale(0.95);
             text-shadow: none;
         }
 
         .current-line {
-            font-size: 2.8em;
+            /* AJUSTE: El tamaño principal ahora depende del ancho de la pantalla */
+            font-size: 6vw; 
             opacity: 1; 
             transform: translateY(0) scale(1.0);
             
@@ -135,7 +139,8 @@
         }
 
         .next-line {
-            font-size: 1.6em;
+            /* AJUSTE: Intermedio y responsivo */
+            font-size: 4vw; 
             opacity: 0.6; 
             transform: translateY(50px) scale(0.98);
             text-shadow: none;
@@ -166,7 +171,9 @@
         }
 
         .bottom-text {
-            font-size: 1.5em;
+            /* Ya usaba 'em', lo cual es bueno, pero lo haremos con 'vw' para que se adapte mejor */
+            font-size: 4vw;
+            max-width: 90%; /* Limita el ancho en pantallas grandes */
             text-align: center;
             padding: 10px;
             line-height: 1.4;
@@ -178,22 +185,38 @@
                 0 0 40px #FF33A3;
             z-index: 1;
         }
-
+        
+        /* Regla de Media Query para asegurar que no sea *demasiado* pequeño en móviles muy angostos */
         @media (max-width: 480px) {
             #start-text {
                 font-size: 1.8em;
             }
             .current-line {
-                font-size: 2.0em;
+                /* Establece un tamaño mínimo para móviles pequeños, si 6vw es demasiado chico */
+                font-size: 1.8em; 
             }
             .next-line {
-                font-size: 1.4em;
+                font-size: 1.2em;
             }
             .passed-line {
-                font-size: 1.0em;
+                font-size: 0.9em;
             }
             .bottom-text {
-                font-size: 1.2em;
+                font-size: 1.1em;
+            }
+        }
+        
+        /* Regla de Media Query para evitar que sea *demasiado* grande en pantallas gigantes */
+        @media (min-width: 1000px) {
+            .current-line {
+                /* Limita el tamaño a un máximo en escritorios */
+                font-size: 40px; 
+            }
+            .next-line {
+                font-size: 24px;
+            }
+            .passed-line {
+                font-size: 18px;
             }
         }
     </style>
@@ -225,8 +248,8 @@
     <script>
         // Letra FINAL de 9 líneas
         const lyrics = [
-           
-           "We fell in love in October, that's why I love fall",
+            
+            "We fell in love in October, that's why I love fall",
             "Looking at the stars, admiring from afar",
             "My girl, my girl, my girl",
             "You will be my girl",
@@ -242,15 +265,14 @@
         // TIEMPOS DE SINCRONIZACIÓN AJUSTADOS AL NUEVO INICIO DE LA CANCIÓN
         function getLineDuration(index) {
             switch(index) {
-                case 0: return 10700; // "You look so pretty and I love this view" (2.0s)
-                case 1: return 7600; // "We fell in love in October, that's why I love fall" (3.2s)
-                case 2: return 3400; // "Looking at the stars, admiring from afar" (3.5s)
-                case 3: return 3800; // "My girl, my girl, my girl" (1.8s)
-                case 4: return 4000; // "You will be my girl" (2.0s)
-                case 5: return 3900; // "My girl, my girl, my girl" (1.8s)
-                case 6: return 4000; // "You will be my world" (2.0s)
-                case 7: return 8800; // "My world, my world, my world" (1.8s)
-                case 8: return 4000; // "You will be my girl" (4.0s - Final de la canción)
+                case 0: return 10700; // "We fell in love in October, that's why I love fall" 
+                case 1: return 7600; // "Looking at the stars, admiring from afar" 
+                case 2: return 3400; // "My girl, my girl, my girl" 
+                case 3: return 3800; // "You will be my girl" 
+                case 4: return 4000; // "My girl, my girl, my girl" 
+                case 5: return 3900; // "You will be my world" 
+                case 6: return 4000; // "My world, my world, my world" 
+                case 7: return 8800; // "You will be my girl" 
                 default: return 5000;
             }
         }
