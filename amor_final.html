@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Johana - Cascada Lírica Perfecta</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden; 
+            background-color: #000;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #fff;
+            position: relative;
+            padding: 20px 0;
+            box-sizing: border-box;
+        }
+
+        /* Estilos de la Pantalla de Inicio (Overlay) */
+        #start-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: opacity 1s ease-out;
+        }
+
+        #start-text {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #FFB6C1;
+            text-shadow: 
+                0 0 15px #FF69B4, 
+                0 0 25px #FF33A3,
+                0 0 40px #FF33A3;
+            animation: pulse 1.5s infinite alternate;
+            text-align: center;
+            padding: 20px;
+        }
+
+        @keyframes pulse {
+            from { opacity: 1; }
+            to { opacity: 0.7; }
+        }
+        
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 300%; 
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.9;
+            animation: moveStarsDown 100s linear infinite; 
+        }
+
+        @keyframes moveStarsDown {
+            from {
+                transform: translateY(-66.6%); 
+            }
+            to {
+                transform: translateY(0%); 
+            }
+        }
+
+        .star {
+            position: absolute;
+            background-color: #fff;
+            border-radius: 50%;
+            opacity: 0.8;
+            animation: twinkle linear infinite; 
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.8; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.8); }
+        }
+
+        .lyric-container {
+            width: 90%;
+            max-width: 800px;
+            height: 150px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            z-index: 1;
+            margin-top: auto;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .lyric-line {
+            position: absolute;
+            opacity: 0;
+            transition: all 1s ease-out; 
+            padding: 5px 0;
+            white-space: nowrap;
+            
+            font-weight: bold;
+            color: #FFB6C1; 
+        }
+
+        .passed-line {
+            font-size: 1.2em;
+            opacity: 0.4;
+            transform: translateY(-50px) scale(0.95);
+            text-shadow: none;
+        }
+
+        .current-line {
+            font-size: 2.8em;
+            opacity: 1; 
+            transform: translateY(0) scale(1.0);
+            
+            text-shadow: 
+                0 0 15px #FF69B4, 
+                0 0 25px #FF33A3,
+                0 0 40px #FF33A3;
+        }
+
+        .next-line {
+            font-size: 1.6em;
+            opacity: 0.6; 
+            transform: translateY(50px) scale(0.98);
+            text-shadow: none;
+        }
+
+        .bears-container {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+            margin: 20px 0;
+            min-height: 250px; 
+        }
+
+        .bears-image {
+            max-width: 110%;
+            max-height: 50vh;
+            object-fit: contain;
+            animation: float 5s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .bottom-text {
+            font-size: 1.5em;
+            text-align: center;
+            padding: 10px;
+            line-height: 1.4;
+            font-weight: bold;
+            color: #FFB6C1;
+            text-shadow: 
+                0 0 15px #FF69B4, 
+                0 0 25px #FF33A3,
+                0 0 40px #FF33A3;
+            z-index: 1;
+        }
+
+        @media (max-width: 480px) {
+            #start-text {
+                font-size: 1.8em;
+            }
+            .current-line {
+                font-size: 2.0em;
+            }
+            .next-line {
+                font-size: 1.4em;
+            }
+            .passed-line {
+                font-size: 1.0em;
+            }
+            .bottom-text {
+                font-size: 1.2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    
+    <div id="start-overlay">
+        <div id="start-text">Toca la pantalla para que empiece la magia pequeña <3...</div>
+    </div>
+
+    <audio id="background-music" loop>
+        <source src="Te amo.mp3" type="audio/mp3">
+        Tu navegador no soporta el elemento de audio.
+    </audio>
+
+    <div class="stars" id="star-container"></div>
+
+    <div class="lyric-container" id="lyric-container">
+    </div>
+
+    <div class="bears-container">
+        <img src="OSOS YOYIS.png" alt="Dos ositos abrazados" class="bears-image">
+    </div>
+
+    <div class="bottom-text">
+        Te amo Johana, sé que un día serás my girl
+    </div>
+
+    <script>
+        // Letra FINAL de 9 líneas
+        const lyrics = [
+           
+           "We fell in love in October, that's why I love fall",
+            "Looking at the stars, admiring from afar",
+            "My girl, my girl, my girl",
+            "You will be my girl",
+            "My girl, my girl, my girl",
+            "You will be my world",
+            "My world, my world, my world",
+            "You will be my girl"
+        ];
+
+        const lyricContainer = document.getElementById('lyric-container');
+        let lineIndex = 0;
+        
+        // TIEMPOS DE SINCRONIZACIÓN AJUSTADOS AL NUEVO INICIO DE LA CANCIÓN
+        function getLineDuration(index) {
+            switch(index) {
+                case 0: return 10700; // "You look so pretty and I love this view" (2.0s)
+                case 1: return 7600; // "We fell in love in October, that's why I love fall" (3.2s)
+                case 2: return 3400; // "Looking at the stars, admiring from afar" (3.5s)
+                case 3: return 3800; // "My girl, my girl, my girl" (1.8s)
+                case 4: return 4000; // "You will be my girl" (2.0s)
+                case 5: return 3900; // "My girl, my girl, my girl" (1.8s)
+                case 6: return 4000; // "You will be my world" (2.0s)
+                case 7: return 8800; // "My world, my world, my world" (1.8s)
+                case 8: return 4000; // "You will be my girl" (4.0s - Final de la canción)
+                default: return 5000;
+            }
+        }
+
+        function updateLyrics() {
+            lyricContainer.innerHTML = '';
+
+            if (lineIndex > 0) {
+                const passedLine = document.createElement('div');
+                passedLine.classList.add('lyric-line', 'passed-line');
+                passedLine.textContent = lyrics[lineIndex - 1];
+                lyricContainer.appendChild(passedLine);
+            }
+
+            if (lineIndex < lyrics.length) {
+                const currentLine = document.createElement('div');
+                currentLine.classList.add('lyric-line', 'current-line');
+                currentLine.textContent = lyrics[lineIndex];
+                lyricContainer.appendChild(currentLine);
+
+                if (lineIndex + 1 < lyrics.length) {
+                    const nextLine = document.createElement('div');
+                    nextLine.classList.add('lyric-line', 'next-line');
+                    nextLine.textContent = lyrics[lineIndex + 1];
+                    lyricContainer.appendChild(nextLine);
+                }
+
+                // Usamos el índice para obtener la duración correcta
+                const duration = getLineDuration(lineIndex);
+                lineIndex++;
+
+                setTimeout(updateLyrics, duration);
+            } else {
+                // Al finalizar la letra (después de la línea 8)
+                setTimeout(() => {
+                    lineIndex = 0;
+                    updateLyrics();
+                }, 5000); 
+            }
+        }
+
+        function startExperience() {
+            const overlay = document.getElementById('start-overlay');
+            const audio = document.getElementById('background-music');
+
+            function handleUserInteraction() {
+                // Pequeño retardo de 50ms para que la música empiece exactamente
+                // justo antes de que aparezca la primera línea.
+                audio.play();
+
+                overlay.style.opacity = '0';
+                
+                setTimeout(() => {
+                    overlay.style.display = 'none';
+                }, 1000); 
+
+                updateLyrics();
+
+                overlay.removeEventListener('click', handleUserInteraction);
+                overlay.removeEventListener('touchstart', handleUserInteraction);
+            }
+            
+            overlay.addEventListener('click', handleUserInteraction);
+            overlay.addEventListener('touchstart', handleUserInteraction);
+        }
+        
+        setTimeout(startExperience, 500); 
+
+        const starContainer = document.getElementById('star-container');
+        const numberOfStars = 250; 
+
+        for (let i = 0; i < numberOfStars; i++) {
+            const star = document.createElement('div');
+            star.classList.add('star');
+
+            star.style.left = Math.random() * 100 + 'vw';
+            star.style.top = Math.random() * 300 + 'vh';
+
+            const size = Math.random() * 3 + 1;
+            star.style.width = size + 'px';
+            star.style.height = size + 'px';
+
+            star.style.animationDuration = Math.random() * 3 + 1 + 's'; 
+            star.style.animationDelay = Math.random() * 3 + 's'; 
+
+            starContainer.appendChild(star);
+        }
+    </script>
+</body>
+</html>
